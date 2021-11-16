@@ -25,10 +25,16 @@ function registerNewUser(req, res, next) {
 
 // [POST] - logs  user in
 function loginUser (req, res) {
+    const { user_id, username, role_id } = req.body
     const token = generators.token(req.body)
     res.status(200).json({
         message: `Welcome back ${req.body.username}`,
-        token
+        token,
+        user: {
+            role_id: role_id,
+            user_id: user_id,
+            username: username
+        }
     })
 }
 
