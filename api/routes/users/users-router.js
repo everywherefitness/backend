@@ -65,8 +65,12 @@ function addUserToClass(req, res, next) {
 function removeUserFromClass(req, res, next) {
     const { class_id, client_id } = req.params
     ClientsClasses.remove({ class_id: class_id, client_id: client_id })
-        .then(something => {
-            res.json(something)
+        .then(() => {
+            ClientsClasses.findBy({ client_id: client_id })
+                .then(enrolledClasses => {
+                    res.json(enrolledClasses)
+                })
+                .catch(next)
         })
         .catch(next)
 }
