@@ -44,24 +44,40 @@ function deleteUser(req, res, next) {
 
 // [GET] - get all classes per specific user
 function classesPerUser(req, res, next) {
-    ClientsClasses.findBy({ client_id: req.params.id })
-        .then(resp => {
-            res.json(resp)
+    ClientsClasses.findBy({ client_id: req.params.client_id })
+        .then(enrolledClasses => {
+            res.json(enrolledClasses)
         })
         .catch(next)
 }
 
-// // [POST] - add a user to a class
-// function addUserToClass(req, res, next) {
-//     ClientsClasses.add({ class_id: req.params})
-// }
+// [POST] - add a user to a class
+function addUserToClass(req, res, next) {
+    const { class_id, client_id } = req.params
+    ClientsClasses.add({ class_id: class_id, client_id: client_id })
+        .then(newlyJoinedClass => {
+            res.json(newlyJoinedClass)
+        })
+        .catch(next)
+}
+
+// [DELETE] - remove a user from a class
+function removeUserFromClass(req, res, next) {
+    const { class_id, client_id } = req.params
+    ClientsClasses.remove({ class_id: class_id, client_id: client_id })
+        .then(something => {
+            res.json(something)
+        })
+        .catch(next)
+}
 
 usersRouter
     .get('/', mw.only([1]), allUsers)
     .get('/:id', mw.only([1, 3]), userById)
     .put('/:id', mw.only([1, 3]), editUser)
     .delete('/:id', mw.only([1, 3]), deleteUser)
-    .get('/:id/classes', mw.only([1, 3]), classesPerUser)
-    // .post('/classes/:id')
+    .get('/:client_id/classes', mw.only([1, 3]), classesPerUser)
+    .post('/:client_id/classes/:class_id', addUserToClass)
+    .delete('/:client_id/classes/:class_id', removeUserFromClass)
 
 module.exports = usersRouter;

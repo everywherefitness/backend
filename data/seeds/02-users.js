@@ -7,37 +7,37 @@ exports.seed = function(knex) {
       // Inserts seed entries
       return knex('users').insert([
         {
-          name: 'admin',
+          given_name: 'admin',
           username: 'admin',
           email: 'admin@admin.com',
           role_id: 1,
           password: generators.password('admin')
         },
         {
-          name: 'Trey',
-          username: 'jeditrey',
+          given_name: 'Trey',
+          username: 'trey',
           email: 'trey@guitar.com',
           role_id: 2,
-          password: generators.password('trey123')
+          password: generators.password('trey')
         },
         {
-          name: 'Mike',
-          username: 'mikebombs',
+          given_name: 'Mike',
+          username: 'mike',
           email: 'mike@bass.com',
-          password: generators.password('mike123')
+          password: generators.password('mike')
         },
         {
-          name: 'Page',
-          username: 'boardchairman',
+          given_name: 'Page',
+          username: 'page',
           email: 'page@keys.com',
           role_id: 2,
-          password: generators.password('page123')
+          password: generators.password('page')
         },
         {
-          name: 'Fish',
-          username: 'henrietta', 
+          given_name: 'Fish',
+          username: 'fish', 
           email: 'fishman@drums.com',
-          password: generators.password('fish123')
+          password: generators.password('fish')
 
         }
       ]);

@@ -2,7 +2,7 @@ exports.up = async (knex) => {
   await knex.schema
     .createTable('classes', table => {
         table.increments('class_id')
-        table.string('name').notNullable().unique()
+        table.string('class_name').notNullable().unique()
         table.integer('instructor_id')
             table.foreign('instructor_id')
                 .references('user_id')
