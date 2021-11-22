@@ -2,6 +2,7 @@ const usersRouter = require('express').Router()
 const Users = require('../../../data/models/users')
 const mw = require('../../middleware/routes/mw.routes')
 const ClientsClasses = require('../../../data/models/clients_classes')
+const Classes = require('../../../data/models/classes')
 
 // [GET] - gets all users
 function allUsers(req, res, next) {
@@ -62,6 +63,7 @@ function addUserToClass(req, res, next) {
 }
 
 // [DELETE] - remove a user from a class
+// REVISIT and change this probably
 function removeUserFromClass(req, res, next) {
     const { class_id, client_id } = req.params
     ClientsClasses.remove({ class_id: class_id, client_id: client_id })
@@ -75,12 +77,22 @@ function removeUserFromClass(req, res, next) {
         .catch(next)
 }
 
+// [GET] - get all classes per specific instructor
+function classesPerInstructor(req, res, next) {
+    Classes.findBy({ instructor_id: req.params.client_id })
+        .then(instructorClasses => {
+            res.json(instructorClasses)
+        })
+        .catch(next)
+}
+
 usersRouter
     .get('/', mw.only([1]), allUsers)
     .get('/:id', mw.only([1, 3]), userById)
     .put('/:id', mw.only([1, 3]), editUser)
     .delete('/:id', mw.only([1, 3]), deleteUser)
-    .get('/:client_id/classes', mw.only([1, 3]), classesPerUser)
+    .get('/:client_id/cli/classes', mw.only([1, 3]), classesPerUser)
+    .get('/:client_id/inst/classes', mw.only([1, 2]), classesPerInstructor)
     .post('/:client_id/classes/:class_id', addUserToClass)
     .delete('/:client_id/classes/:class_id', removeUserFromClass)
 
