@@ -2,6 +2,7 @@ const usersRouter = require('express').Router()
 const Users = require('../../../data/models/users')
 const mw = require('../../middleware/routes/mw.routes')
 const ClientsClasses = require('../../../data/models/clients_classes')
+const Classes = require('../../../data/models/classes')
 
 // [GET] - gets all users
 function allUsers(req, res, next) {
@@ -24,7 +25,7 @@ function userById(req, res, next) {
 // [PUT] - edits existing user by id
 function editUser(req, res, next) {
     const changes = req.body
-    Users.update(changes, req.params.id)
+    Users.update(req.params.id, changes)
         .then(edit => {
             res.json(edit[0])
         })
@@ -44,24 +45,55 @@ function deleteUser(req, res, next) {
 
 // [GET] - get all classes per specific user
 function classesPerUser(req, res, next) {
-    ClientsClasses.findBy({ client_id: req.params.id })
-        .then(resp => {
-            res.json(resp)
+    ClientsClasses.findBy({ client_id: req.params.client_id })
+        .then(enrolledClasses => {
+            res.json(enrolledClasses)
         })
         .catch(next)
 }
 
-// // [POST] - add a user to a class
-// function addUserToClass(req, res, next) {
-//     ClientsClasses.add({ class_id: req.params})
-// }
+// [POST] - add a user to a class
+function addUserToClass(req, res, next) {
+    const { class_id, client_id } = req.params
+    ClientsClasses.add({ class_id: class_id, client_id: client_id })
+        .then(newlyJoinedClass => {
+            res.json(newlyJoinedClass)
+        })
+        .catch(next)
+}
+
+// [DELETE] - remove a user from a class
+// REVISIT and change this probably
+function removeUserFromClass(req, res, next) {
+    const { class_id, client_id } = req.params
+    ClientsClasses.remove({ class_id: class_id, client_id: client_id })
+        .then(() => {
+            ClientsClasses.findBy({ client_id: client_id })
+                .then(enrolledClasses => {
+                    res.json(enrolledClasses)
+                })
+                .catch(next)
+        })
+        .catch(next)
+}
+
+// [GET] - get all classes per specific instructor
+function classesPerInstructor(req, res, next) {
+    Classes.findBy({ instructor_id: req.params.client_id })
+        .then(instructorClasses => {
+            res.json(instructorClasses)
+        })
+        .catch(next)
+}
 
 usersRouter
     .get('/', mw.only([1]), allUsers)
     .get('/:id', mw.only([1, 3]), userById)
-    .put('/:id', mw.only([1, 3]), editUser)
+    .put('/:id', editUser)
     .delete('/:id', mw.only([1, 3]), deleteUser)
-    .get('/:id/classes', mw.only([1, 3]), classesPerUser)
-    // .post('/classes/:id')
+    .get('/:client_id/cli/classes', mw.only([1, 3]), classesPerUser)
+    .get('/:client_id/inst/classes', mw.only([1, 2]), classesPerInstructor)
+    .post('/:client_id/classes/:class_id', addUserToClass)
+    .delete('/:client_id/classes/:class_id', removeUserFromClass)
 
 module.exports = usersRouter;

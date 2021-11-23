@@ -8,13 +8,31 @@ function registerNewUser(req, res, next) {
     let user = req.body
     const hash = generators.password(user.password)
     user.password = hash
-
+    
     Users.add(user)
         .then(user => {
-            res.status(201).json({
-                message: `Ahoy, ${user.username}, welcome aboard!`,
-                user
-            }) 
+            const hammeredUserObj = {
+                username: user.username,
+                user_id: user.user_id
+            }
+            if (user.role_id === 3) {
+                Users.addToClients(hammeredUserObj)
+                    .then(user => {
+                        res.status(201).json({
+                            user,
+                            message: `Ahoy, ${user[0].username}`})
+                    })
+                    .catch(err => next(err))
+            }
+            if (user.role_id === 2) {
+                Users.addToInstructors(hammeredUserObj)
+                    .then(user => {
+                        res.status(201).json({
+                            user,
+                            message: `Ahoy, ${user[0].username}`})
+                    })
+                    .catch(err => {next(err)})
+            }
         })
         .catch(err => {
             // and  link up error stuff linke 12 from mw.routes.js
@@ -22,6 +40,18 @@ function registerNewUser(req, res, next) {
             next(err)
         })
 }
+
+// function addToCorrectDatabase(req, res, next) {
+//     let user = req.body
+
+//     if (user.role_id === 3) {
+//         Users.addToClients(user)
+//             .then(resp => {
+//                 res.json(resp)
+//             })
+//             .catch(err => {next(err)})
+//     }
+// }
 
 // [POST] - logs  user in
 function loginUser (req, res) {

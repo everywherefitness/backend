@@ -25,7 +25,17 @@ async function add(user) {
   return getById(newUserObject.user_id)
 }
 
-function update(changes, id) {
+// create addClient and addInstructor to separate tables
+
+async function addToClients(user) {
+    return await db('clients').insert(user).returning('*')
+}
+
+async function addToInstructors(user) {
+    return await db('instructors').insert(user).returning('*')
+}
+
+function update(id, changes) {
     return db('users').where('user_id', id).update(changes).returning('*')
 }
 
@@ -47,5 +57,7 @@ module.exports = {
     add,
     update,
     remove,
-    retrieveClassesPerUser
+    retrieveClassesPerUser,
+    addToClients,
+    addToInstructors
 }

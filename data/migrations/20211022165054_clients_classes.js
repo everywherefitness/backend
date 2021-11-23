@@ -12,7 +12,7 @@ exports.up = async function(knex) {
             .inTable('users')
             .onUpdate('CASCADE')
             .onDelete('CASCADE');
-      table.timestamps(true, true);
+      // table.timestamps(true, true);
       table.primary(['class_id', 'client_id']);
     });
   };

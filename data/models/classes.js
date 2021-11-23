@@ -9,7 +9,7 @@ async function getClassById(id) {
 }
 
 async function findBy(filter) {
-    return await db('classes').where(filter).first()
+    return await db('classes').where(filter).returning('*')
 }
 
 async function add(submittedClass) {

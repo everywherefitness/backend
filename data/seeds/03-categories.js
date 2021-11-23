@@ -5,13 +5,13 @@ exports.seed = function(knex) {
     .then(function () {
       // Inserts seed entries
       return knex('categories').insert([
-        {name: 'Water Aerobics'},
-        {name: 'Aerobics'},
-        {name: 'Cycling'},
-        {name: 'Taekwondo'},
-        {name: 'Yoga'},
-        {name: 'Pilates'},
-        {name: 'Hiking & Backpacking'}
+        {category_name: 'Water Aerobics'},
+        {category_name: 'Aerobics'},
+        {category_name: 'Cycling'},
+        {category_name: 'Taekwondo'},
+        {category_name: 'Yoga'},
+        {category_name: 'Pilates'},
+        {category_name: 'Hiking & Backpacking'}
       ]);
     });
 };

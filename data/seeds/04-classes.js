@@ -6,7 +6,7 @@ exports.seed = function(knex) {
       // Inserts seed entries
       return knex('classes').insert([
         {
-          name: 'Speed-jaywalking',
+          class_name: 'Speed-jaywalking',
           category_id: 1,
           instructor_id: 2,  
           start_time: '10:00 AM',
@@ -17,7 +17,7 @@ exports.seed = function(knex) {
           max_capacity: 30
         },
         {
-          name: 'Pool Hopping',
+          class_name: 'Pool Hopping',
           category_id: 2,
           instructor_id: 4,
           start_time: '11:30 PM',
@@ -28,7 +28,7 @@ exports.seed = function(knex) {
           max_capacity: 30
         },
         {
-          name: 'Roofing',
+          class_name: 'Roofing',
           category_id: 4,
           instructor_id: 2,
           start_time: '11:30 PM',

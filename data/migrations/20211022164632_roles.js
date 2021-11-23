@@ -2,7 +2,7 @@ exports.up = async function(knex) {
     await knex.schema
         .createTable('roles', table => {
             table.increments('role_id')
-            table.string('name').notNullable().unique()
+            table.string('role_name').notNullable().unique()
         })
   };
   
