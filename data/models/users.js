@@ -35,7 +35,7 @@ async function addToInstructors(user) {
     return await db('instructors').insert(user).returning('*')
 }
 
-function update(changes, id) {
+function update(id, changes) {
     return db('users').where('user_id', id).update(changes).returning('*')
 }
 

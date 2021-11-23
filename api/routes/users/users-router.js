@@ -25,7 +25,7 @@ function userById(req, res, next) {
 // [PUT] - edits existing user by id
 function editUser(req, res, next) {
     const changes = req.body
-    Users.update(changes, req.params.id)
+    Users.update(req.params.id, changes)
         .then(edit => {
             res.json(edit[0])
         })
@@ -89,7 +89,7 @@ function classesPerInstructor(req, res, next) {
 usersRouter
     .get('/', mw.only([1]), allUsers)
     .get('/:id', mw.only([1, 3]), userById)
-    .put('/:id', mw.only([1, 3]), editUser)
+    .put('/:id', editUser)
     .delete('/:id', mw.only([1, 3]), deleteUser)
     .get('/:client_id/cli/classes', mw.only([1, 3]), classesPerUser)
     .get('/:client_id/inst/classes', mw.only([1, 2]), classesPerInstructor)
